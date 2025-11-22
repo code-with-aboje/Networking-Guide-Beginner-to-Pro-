@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Bash Guide: Beginner to Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;line-height:1.7;color:#1a1a1a;max-width:800px;margin:0 auto;padding:40px 20px;background:#fff}
+h1{font-size:2.2em;text-align:center;margin-bottom:5px;color:#0d47a1}
+h2{font-size:1.6em;color:#1565c0;margin-top:40px;padding-bottom:8px;border-bottom:2px solid#1565c0}
+h3{font-size:1.3em;color:#1976d2;margin-top:30px}
+h4{font-size:1.1em;color:#333;margin-top:20px}
+p{margin:15px 0;text-align:justify}
+pre{background:#f5f5f5;border-left:4px solid#1565c0;padding:15px;overflow-x:auto;font-family:'Courier New',monospace;font-size:0.9em;margin:15px 0;border-radius:0 4px 4px 0}
+code{background:#f0f0f0;padding:2px 6px;border-radius:3px;font-family:'Courier New',monospace;font-size:0.9em}
+.subtitle{text-align:center;font-style:italic;color:#666;margin-bottom:40px;font-size:1.1em}
+.exercise{background:#e3f2fd;border-left:4px solid#1976d2;padding:15px 20px;margin:20px 0;border-radius:0 4px 4px 0}
+.exercise-title{font-weight:bold;color:#1565c0;margin-bottom:10px}
+.warning{background:#fff3e0;border-left:4px solid#ff9800;padding:15px;margin:15px 0}
+.tip{background:#e8f5e9;border-left:4px solid#4caf50;padding:15px;margin:15px 0}
+.toc{background:#fafafa;padding:25px;margin:30px 0;border-radius:8px}
+.toc h3{margin-top:0;margin-bottom:15px}
+.toc ul{list-style:none;padding-left:0}
+.toc li{padding:5px 0}
+.toc a{color:#1565c0;text-decoration:none}
+.part-header{background:#1565c0;color:#fff;padding:20px;margin:50px 0 30px 0;text-align:center;border-radius:4px}
+.part-header h2{color:#fff;border:none;margin:0;padding:0}
+ol,ul{margin:15px 0 15px 30px}
+li{margin:8px 0}
+table{width:100%;border-collapse:collapse;margin:20px 0}
+th,td{border:1px solid#ddd;padding:10px;text-align:left}
+th{background:#f5f5f5}
+@media print{body{padding:20px}.part-header{break-before:page}}
+</style>
+</head>
+<body>
+
+<h1>Complete Bash Guide</h1>
+<p class="subtitle">From Beginner to Professional — A Comprehensive Reference</p>
+
+<div class="toc">
+<h3>Table of Contents</h3>
+<ul>
+<li><strong>Part 1: Foundations</strong> — Shell basics, navigation, files, permissions</li>
+<li><strong>Part 2: Text Processing</strong> — grep, sed, awk, and text manipulation</li>
+<li><strong>Part 3: Scripting Fundamentals</strong> — Variables, conditionals, loops</li>
+<li><strong>Part 4: Functions & Advanced Scripting</strong> — Functions, arrays, arguments</li>
+<li><strong>Part 5: I/O and Processes</strong> — Redirection, pipes, process management</li>
+<li><strong>Part 6: Advanced Topics</strong> — Regex, debugging, best practices</li>
+</ul>
+</div>
+
+<div class="part-header"><h2>PART 1: FOUNDATIONS</h2></div>
+
+<h3>1.1 What is Bash?</h3>
+<p>Bash (Bourne Again SHell) is a command-line interpreter for Unix/Linux systems. It serves as both an interactive shell where you type commands and a scripting language for automation. The shell acts as an interface between you and the operating system kernel.</p>
+
+<p><strong>Key terminology:</strong> The <em>shell</em> interprets your commands. The <em>terminal</em> is the window application hosting the shell. The <em>command line</em> is where you type commands.</p>
+
+<h4>Your First Commands</h4>
+<pre>echo "Hello, World!"    # Print text to screen
+whoami                  # Display current username
+pwd                     # Print working directory
+date                    # Show current date and time
+clear                   # Clear the terminal screen
+history                 # Show command history</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 1.1</div>
+<ol>
+<li>Open a terminal and print your username</li>
+<li>Display today's date</li>
+<li>Print the message "I am learning Bash!"</li>
+<li>Find out which shell you're using with <code>echo $SHELL</code></li>
+<li>View your last 10 commands with <code>history 10</code></li>
+</ol>
+</div>
+
+<h3>1.2 Navigating the Filesystem</h3>
+<p>The Linux filesystem is organized as a hierarchical tree starting at the root directory (<code>/</code>). Understanding navigation is fundamental to effective shell usage.</p>
+
+<pre>pwd                     # Where am I? (Print Working Directory)
+ls                      # List files in current directory
+ls -l                   # Long format with details
+ls -la                  # Include hidden files (starting with .)
+ls -lh                  # Human-readable file sizes
+cd /path/to/dir         # Change to specified directory
+cd ..                   # Go up one level
+cd ~                    # Go to home directory
+cd -                    # Go to previous directory
+cd                      # Also goes to home directory</pre>
+
+<p><strong>Path Types:</strong> An <em>absolute path</em> starts from root: <code>/home/user/documents</code>. A <em>relative path</em> starts from your current location: <code>../documents</code> means "up one level, then into documents."</p>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 1.2</div>
+<ol>
+<li>Navigate to your home directory using two different methods</li>
+<li>List all files including hidden ones</li>
+<li>Go to <code>/tmp</code>, then return using <code>cd -</code></li>
+<li>Navigate to <code>/var/log</code>, list contents, and return home</li>
+<li>Use <code>ls -la /etc</code> to view a directory without changing to it</li>
+</ol>
+</div>
+
+<h3>1.3 File and Directory Operations</h3>
+
+<h4>Creating Files and Directories</h4>
+<pre>mkdir dirname           # Create a directory
+mkdir -p path/to/nested # Create nested directories
+touch filename          # Create empty file (or update timestamp)
+touch file1 file2 file3 # Create multiple files</pre>
+
+<h4>Copying Files</h4>
+<pre>cp source destination   # Copy a file
+cp -r source dest       # Copy directory recursively
+cp -i source dest       # Prompt before overwriting
+cp file1 file2 dir/     # Copy multiple files to directory</pre>
+
+<h4>Moving and Renaming</h4>
+<pre>mv oldname newname      # Rename a file
+mv file /path/to/dest   # Move file to new location
+mv -i source dest       # Prompt before overwriting</pre>
+
+<h4>Deleting Files</h4>
+<pre>rm filename             # Remove a file
+rm -r dirname           # Remove directory and contents
+rm -i filename          # Prompt before deletion
+rm -rf dirname          # Force remove without prompting</pre>
+
+<div class="warning">
+<strong>Warning:</strong> <code>rm -rf</code> is dangerous! There is no trash can—deletions are permanent. Always double-check your path before using this command.
+</div>
+
+<h4>Viewing File Contents</h4>
+<pre>cat file                # Display entire file
+less file               # Paginated view (q to quit)
+head file               # First 10 lines
+head -n 20 file         # First 20 lines
+tail file               # Last 10 lines
+tail -n 20 file         # Last 20 lines
+tail -f file            # Follow file updates in real-time</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 1.3</div>
+<ol>
+<li>Create a directory structure: <code>projects/bash/exercises</code></li>
+<li>Inside <code>exercises</code>, create files: <code>ex1.sh</code>, <code>ex2.sh</code>, <code>ex3.sh</code></li>
+<li>Copy <code>ex1.sh</code> to <code>ex1_backup.sh</code></li>
+<li>Rename <code>ex3.sh</code> to <code>exercise_three.sh</code></li>
+<li>Delete <code>ex2.sh</code></li>
+<li>View the contents of <code>/etc/passwd</code> using <code>less</code></li>
+</ol>
+</div>
+
+<h3>1.4 File Permissions</h3>
+<p>Every file has permissions for three categories: owner (u), group (g), and others (o). Each category can have read (r), write (w), and execute (x) permissions.</p>
+
+<pre># Permission format: rwxrwxrwx
+# First rwx: owner | Second rwx: group | Third rwx: others
+
+ls -l file              # View permissions
+chmod 755 file          # Set rwxr-xr-x
+chmod +x file           # Add execute for everyone
+chmod u+w file          # Add write for owner
+chmod go-r file         # Remove read from group and others
+chmod 644 file          # Set rw-r--r--
+
+chown user file         # Change owner
+chown user:group file   # Change owner and group</pre>
+
+<p><strong>Numeric permissions:</strong> r=4, w=2, x=1. Add them together: 7=rwx, 6=rw-, 5=r-x, 4=r--</p>
+
+<table>
+<tr><th>Number</th><th>Permission</th><th>Meaning</th></tr>
+<tr><td>7</td><td>rwx</td><td>Read, write, execute</td></tr>
+<tr><td>6</td><td>rw-</td><td>Read, write</td></tr>
+<tr><td>5</td><td>r-x</td><td>Read, execute</td></tr>
+<tr><td>4</td><td>r--</td><td>Read only</td></tr>
+<tr><td>0</td><td>---</td><td>No permissions</td></tr>
+</table>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 1.4</div>
+<ol>
+<li>Create a file and view its permissions with <code>ls -l</code></li>
+<li>Make it executable with <code>chmod +x</code></li>
+<li>Set permissions to 600 (owner read/write only)</li>
+<li>Try reading a file you don't have permission for—what happens?</li>
+</ol>
+</div>
+
+<h3>1.5 Getting Help</h3>
+<pre>man command             # Full manual page
+command --help          # Brief help (most commands)
+info command            # GNU info documentation
+whatis command          # One-line description
+which command           # Show command location
+type command            # Show if built-in or external</pre>
+
+<div class="part-header"><h2>PART 2: TEXT PROCESSING</h2></div>
+
+<h3>2.1 Essential Text Commands</h3>
+
+<h4>grep — Search for Patterns</h4>
+<pre>grep "pattern" file           # Find lines containing pattern
+grep -i "pattern" file        # Case-insensitive search
+grep -r "pattern" directory/  # Recursive search in directory
+grep -v "pattern" file        # Invert match (exclude pattern)
+grep -n "pattern" file        # Show line numbers
+grep -c "pattern" file        # Count matching lines
+grep -l "pattern" *.txt       # List files containing pattern
+grep -w "word" file           # Match whole words only</pre>
+
+<h4>sort — Sort Lines</h4>
+<pre>sort file                     # Sort alphabetically
+sort -n file                  # Sort numerically
+sort -r file                  # Reverse order
+sort -u file                  # Sort and remove duplicates
+sort -k2 file                 # Sort by second field
+sort -t',' -k2 file           # Sort CSV by second column</pre>
+
+<h4>uniq — Filter Duplicates</h4>
+<pre>uniq file                     # Remove adjacent duplicates
+sort file | uniq              # Remove all duplicates
+uniq -c file                  # Count occurrences
+uniq -d file                  # Show only duplicates</pre>
+
+<h4>wc — Word Count</h4>
+<pre>wc file                       # Lines, words, characters
+wc -l file                    # Lines only
+wc -w file                    # Words only
+wc -c file                    # Bytes only
+wc -m file                    # Characters only</pre>
+
+<h4>cut — Extract Fields</h4>
+<pre>cut -d',' -f1 file            # First field, comma delimiter
+cut -d':' -f1,3 file          # Fields 1 and 3, colon delimiter
+cut -c1-10 file               # Characters 1 through 10
+cut -c5- file                 # Character 5 to end</pre>
+
+<h4>tr — Translate Characters</h4>
+<pre>tr 'a-z' 'A-Z' < file         # Convert to uppercase
+tr 'A-Z' 'a-z' < file         # Convert to lowercase
+tr -d '0-9' < file            # Delete all digits
+tr -s ' ' < file              # Squeeze repeated spaces
+tr ':' '\t' < file            # Replace colons with tabs</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 2.1</div>
+<ol>
+<li>Create a file with 15 names (one per line), some duplicated</li>
+<li>Sort them alphabetically and remove duplicates</li>
+<li>Count how many names contain the letter 'a'</li>
+<li>Convert all names to uppercase</li>
+<li>Find the 5 longest names (hint: use <code>awk</code> with length)</li>
+</ol>
+</div>
+
+<h3>2.2 sed — Stream Editor</h3>
+<p>sed performs text transformations on input streams or files. It's powerful for find-and-replace operations and line manipulation.</p>
+
+<h4>Substitution</h4>
+<pre>sed 's/old/new/' file         # Replace first occurrence per line
+sed 's/old/new/g' file        # Replace ALL occurrences
+sed 's/old/new/gi' file       # Case-insensitive replacement
+sed -i 's/old/new/g' file     # Edit file in place
+sed 's/old/new/2' file        # Replace only 2nd occurrence</pre>
+
+<h4>Deletion</h4>
+<pre>sed '3d' file                 # Delete line 3
+sed '2,5d' file               # Delete lines 2-5
+sed '$d' file                 # Delete last line
+sed '/pattern/d' file         # Delete lines matching pattern
+sed '/^$/d' file              # Delete empty lines</pre>
+
+<h4>Insertion and Appending</h4>
+<pre>sed '2i\New line' file        # Insert before line 2
+sed '2a\New line' file        # Append after line 2
+sed '1i\Header' file          # Add header line</pre>
+
+<h4>Printing</h4>
+<pre>sed -n '5p' file              # Print only line 5
+sed -n '5,10p' file           # Print lines 5-10
+sed -n '/pattern/p' file      # Print matching lines</pre>
+
+<h4>Multiple Operations</h4>
+<pre>sed -e 's/a/A/g' -e 's/b/B/g' file
+sed 's/a/A/g; s/b/B/g' file   # Same as above</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 2.2</div>
+<ol>
+<li>Create a file with "Hello World" on 5 lines</li>
+<li>Replace all "World" with "Bash"</li>
+<li>Delete lines 2 and 4</li>
+<li>Add a header "=== My File ===" at the beginning</li>
+<li>Number all lines (hint: use <code>=</code> command with sed)</li>
+</ol>
+</div>
+
+<h3>2.3 awk — Pattern Processing Language</h3>
+<p>awk is a powerful text-processing language that excels at working with columnar data. It processes input line by line, splitting each line into fields.</p>
+
+<h4>Basic Syntax</h4>
+<pre>awk 'pattern {action}' file
+awk '{print $0}' file         # Print entire line
+awk '{print $1}' file         # Print first field
+awk '{print $1, $3}' file     # Print fields 1 and 3
+awk '{print $NF}' file        # Print last field
+awk '{print NF}' file         # Print number of fields</pre>
+
+<h4>Field Separator</h4>
+<pre>awk -F',' '{print $1}' file   # Comma delimiter
+awk -F':' '{print $1}' file   # Colon delimiter
+awk -F'\t' '{print $1}' file  # Tab delimiter</pre>
+
+<h4>Conditions</h4>
+<pre>awk '$3 > 100' file                 # Lines where field 3 > 100
+awk '$1 == "John"' file             # Lines where field 1 is "John"
+awk '/pattern/' file                # Lines matching pattern
+awk '!/pattern/' file               # Lines NOT matching pattern
+awk 'NR > 1' file                   # Skip header (line 1)</pre>
+
+<h4>Built-in Variables</h4>
+<pre>NR    # Current line number (record number)
+NF    # Number of fields in current line
+$0    # Entire current line
+$1-$n # Individual fields
+FS    # Field separator (input)
+OFS   # Output field separator</pre>
+
+<h4>Calculations</h4>
+<pre>awk '{sum += $1} END {print sum}' file           # Sum column 1
+awk '{sum += $1} END {print sum/NR}' file        # Average
+awk 'BEGIN {max=0} $1>max {max=$1} END {print max}' file  # Maximum</pre>
+
+<h4>Formatted Output</h4>
+<pre>awk '{printf "%-10s %5d\n", $1, $2}' file
+# %-10s = left-aligned string, 10 chars wide
+# %5d = right-aligned integer, 5 chars wide</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 2.3</div>
+Create a file <code>employees.csv</code> with this content:
+<pre>Name,Age,Department,Salary
+Alice,28,Engineering,75000
+Bob,35,Marketing,65000
+Carol,42,Engineering,95000
+David,31,Sales,55000
+Eve,29,Engineering,80000</pre>
+<ol>
+<li>Print only names and salaries</li>
+<li>Find employees over age 30</li>
+<li>Calculate average salary</li>
+<li>Find the highest-paid employee</li>
+<li>Count employees in Engineering</li>
+</ol>
+</div>
+
+<div class="part-header"><h2>PART 3: SCRIPTING FUNDAMENTALS</h2></div>
+
+<h3>3.1 Your First Script</h3>
+<p>A Bash script is a text file containing commands. The first line (shebang) tells the system which interpreter to use.</p>
+
+<pre>#!/bin/bash
+# This is a comment
+# Script: hello.sh
+
+echo "Hello, $USER!"
+echo "Today is $(date)"
+echo "You are in $(pwd)"
+echo "Your home directory is $HOME"</pre>
+
+<h4>Running Scripts</h4>
+<pre>chmod +x script.sh      # Make executable (one time)
+./script.sh             # Run from current directory
+bash script.sh          # Run with bash explicitly
+source script.sh        # Run in current shell (affects environment)</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 3.1</div>
+Create a script called <code>sysinfo.sh</code> that displays:
+<ol>
+<li>A welcome message with your username</li>
+<li>Current date and time</li>
+<li>System uptime (<code>uptime</code>)</li>
+<li>Current directory</li>
+<li>Number of files in current directory</li>
+</ol>
+</div>
+
+<h3>3.2 Variables</h3>
+
+<h4>Declaration and Usage</h4>
+<pre># Declaration (NO spaces around =)
+name="John"
+age=25
+filename="data.txt"
+
+# Usage
+echo $name
+echo ${name}              # Safer syntax, preferred
+echo "${name}'s age is $age"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Networking Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;line-height:1.7;color:#1a1a1a;max-width:850px;margin:0 auto;padding:40px 20px;background:#fff}
+h1{font-size:2.2em;text-align:center;margin-bottom:5px;color:#b71c1c}
+h2{font-size:1.6em;color:#c62828;margin-top:40px;padding-bottom:8px;border-bottom:2px solid #c62828}
+h3{font-size:1.3em;color:#d32f2f;margin-top:30px}
+h4{font-size:1.1em;color:#333;margin-top:20px}
+p{margin:15px 0;text-align:justify}
+pre{background:#f5f5f5;border-left:4px solid #c62828;padding:15px;overflow-x:auto;font-family:'Courier New',monospace;font-size:0.85em;margin:15px 0;border-radius:0 4px 4px 0}
+code{background:#f0f0f0;padding:2px 6px;border-radius:3px;font-family:'Courier New',monospace;font-size:0.9em}
+.subtitle{text-align:center;font-style:italic;color:#666;margin-bottom:40px;font-size:1.1em}
+.exercise{background:#ffebee;border-left:4px solid #d32f2f;padding:15px 20px;margin:20px 0;border-radius:0 4px 4px 0}
+.exercise-title{font-weight:bold;color:#c62828;margin-bottom:10px}
+.note{background:#fff3e0;border-left:4px solid #ff9800;padding:15px;margin:15px 0}
+.tip{background:#e8f5e9;border-left:4px solid #4caf50;padding:15px;margin:15px 0}
+.warning{background:#ffebee;border-left:4px solid #f44336;padding:15px;margin:15px 0}
+.toc{background:#fafafa;padding:25px;margin:30px 0;border-radius:8px}
+.toc h3{margin-top:0;margin-bottom:15px}
+.toc ul{list-style:none;padding-left:0}
+.toc li{padding:5px 0}
+.part-header{background:#c62828;color:#fff;padding:20px;margin:50px 0 30px 0;text-align:center;border-radius:4px}
+.part-header h2{color:#fff;border:none;margin:0;padding:0}
+ol,ul{margin:15px 0 15px 30px}
+li{margin:8px 0}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:0.9em}
+th,td{border:1px solid #ddd;padding:10px;text-align:left}
+th{background:#f5f5f5}
+.diagram{background:#fafafa;border:1px solid #ddd;padding:20px;margin:20px 0;font-family:'Courier New',monospace;font-size:0.85em;overflow-x:auto}
+@media print{body{padding:20px;font-size:11pt}.part-header{break-before:page}pre{font-size:9pt}}
+</style>
+</head>
+<body>
+
+<h1>Complete Networking Guide</h1>
+<p class="subtitle">From Fundamentals to Advanced — TCP/IP, Protocols, Security & More</p>
+
+<div class="toc">
+<h3>Table of Contents</h3>
+<ul>
+<li><strong>Part 1: Networking Fundamentals</strong> — OSI Model, TCP/IP, addressing basics</li>
+<li><strong>Part 2: IP Addressing & Subnetting</strong> — IPv4, IPv6, CIDR, subnet calculations</li>
+<li><strong>Part 3: Transport Layer</strong> — TCP, UDP, ports, connections</li>
+<li><strong>Part 4: Application Protocols</strong> — HTTP, DNS, DHCP, FTP, SSH, and more</li>
+<li><strong>Part 5: Network Tools & Commands</strong> — Diagnostic and configuration tools</li>
+<li><strong>Part 6: Network Security</strong> — Firewalls, encryption, VPNs, attacks</li>
+<li><strong>Part 7: Advanced Topics</strong> — Routing, NAT, load balancing, troubleshooting</li>
+</ul>
+</div>
+
+<div class="part-header"><h2>PART 1: NETWORKING FUNDAMENTALS</h2></div>
+
+<h3>1.1 What is a Network?</h3>
+<p>A network is a collection of interconnected devices that can communicate and share resources. Networks range from small home setups (LAN) to the global Internet (WAN). Understanding networking is essential for system administration, development, security, and troubleshooting.</p>
+
+<h4>Network Types</h4>
+<table>
+<tr><th>Type</th><th>Range</th><th>Description</th></tr>
+<tr><td>PAN</td><td>~10m</td><td>Personal Area Network (Bluetooth devices)</td></tr>
+<tr><td>LAN</td><td>~1km</td><td>Local Area Network (home, office)</td></tr>
+<tr><td>MAN</td><td>~100km</td><td>Metropolitan Area Network (city-wide)</td></tr>
+<tr><td>WAN</td><td>Global</td><td>Wide Area Network (Internet)</td></tr>
+</table>
+
+<h3>1.2 The OSI Model</h3>
+<p>The Open Systems Interconnection (OSI) model is a conceptual framework with 7 layers that describes how data moves through a network. Each layer has specific responsibilities and communicates with adjacent layers.</p>
+
+<div class="diagram">
+Layer 7: Application    ─── User interface (HTTP, FTP, SMTP, DNS)
+Layer 6: Presentation   ─── Data formatting, encryption (SSL/TLS, JPEG)
+Layer 5: Session        ─── Connection management (NetBIOS, RPC)
+Layer 4: Transport      ─── End-to-end delivery (TCP, UDP)
+Layer 3: Network        ─── Routing, logical addressing (IP, ICMP)
+Layer 2: Data Link      ─── Physical addressing, frames (Ethernet, MAC)
+Layer 1: Physical       ─── Bits on wire (cables, hubs, signals)
+</div>
+
+<p><strong>Memory aid:</strong> "All People Seem To Need Data Processing" (top-down) or "Please Do Not Throw Sausage Pizza Away" (bottom-up)</p>
+
+<h4>Data Encapsulation</h4>
+<p>As data travels down the layers, each layer adds its header (and sometimes trailer). This process is called encapsulation:</p>
+
+<div class="diagram">
+Application  →  Data
+Transport    →  Segment (TCP) / Datagram (UDP)  [adds port numbers]
+Network      →  Packet                          [adds IP addresses]
+Data Link    →  Frame                           [adds MAC addresses]
+Physical     →  Bits                            [electrical signals]
+</div>
+
+<h3>1.3 The TCP/IP Model</h3>
+<p>The TCP/IP model is a more practical, 4-layer model that maps to real-world protocols. It's what the Internet actually uses.</p>
+
+<table>
+<tr><th>TCP/IP Layer</th><th>OSI Equivalent</th><th>Protocols</th></tr>
+<tr><td>Application</td><td>5, 6, 7</td><td>HTTP, FTP, SMTP, DNS, SSH, Telnet</td></tr>
+<tr><td>Transport</td><td>4</td><td>TCP, UDP</td></tr>
+<tr><td>Internet</td><td>3</td><td>IP, ICMP, ARP</td></tr>
+<tr><td>Network Access</td><td>1, 2</td><td>Ethernet, Wi-Fi, PPP</td></tr>
+</table>
+
+<h3>1.4 Network Devices</h3>
+
+<h4>Layer 1 - Physical</h4>
+<p><strong>Hub:</strong> Simple repeater that broadcasts to all ports. No intelligence—creates collision domains. Obsolete.</p>
+<p><strong>Repeater:</strong> Regenerates signals to extend network distance.</p>
+
+<h4>Layer 2 - Data Link</h4>
+<p><strong>Switch:</strong> Intelligent device that learns MAC addresses and forwards frames only to the correct port. Creates separate collision domains. Most common LAN device.</p>
+<p><strong>Bridge:</strong> Connects two network segments. Predecessor to switches.</p>
+
+<h4>Layer 3 - Network</h4>
+<p><strong>Router:</strong> Forwards packets between different networks using IP addresses. Makes routing decisions. Connects LANs to WANs.</p>
+<p><strong>Layer 3 Switch:</strong> Switch with routing capabilities for high-speed inter-VLAN routing.</p>
+
+<h4>Security Devices</h4>
+<p><strong>Firewall:</strong> Filters traffic based on rules. Can operate at multiple layers.</p>
+<p><strong>IDS/IPS:</strong> Intrusion Detection/Prevention Systems monitor and block threats.</p>
+<p><strong>Proxy:</strong> Intermediary that handles requests on behalf of clients.</p>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 1.1</div>
+<ol>
+<li>List the 7 OSI layers and give one protocol example for each</li>
+<li>Explain the difference between a hub, switch, and router</li>
+<li>What layer does a firewall typically operate at?</li>
+<li>Describe the encapsulation process from Application to Physical layer</li>
+</ol>
+</div>
+
+<div class="part-header"><h2>PART 2: IP ADDRESSING & SUBNETTING</h2></div>
+
+<h3>2.1 IPv4 Addressing</h3>
+<p>An IPv4 address is a 32-bit number typically written as four decimal octets (0-255) separated by dots. Example: 192.168.1.100</p>
+
+<h4>Binary Representation</h4>
+<pre>192.168.1.100 in binary:
+192     = 11000000
+168     = 10101000
+1       = 00000001
+100     = 01100100
+
+Full: 11000000.10101000.00000001.01100100</pre>
+
+<h4>Address Classes (Historical)</h4>
+<table>
+<tr><th>Class</th><th>First Octet</th><th>Range</th><th>Default Mask</th><th>Networks/Hosts</th></tr>
+<tr><td>A</td><td>1-126</td><td>1.0.0.0 - 126.255.255.255</td><td>/8 (255.0.0.0)</td><td>128 nets, 16M hosts</td></tr>
+<tr><td>B</td><td>128-191</td><td>128.0.0.0 - 191.255.255.255</td><td>/16 (255.255.0.0)</td><td>16K nets, 65K hosts</td></tr>
+<tr><td>C</td><td>192-223</td><td>192.0.0.0 - 223.255.255.255</td><td>/24 (255.255.255.0)</td><td>2M nets, 254 hosts</td></tr>
+<tr><td>D</td><td>224-239</td><td>224.0.0.0 - 239.255.255.255</td><td>N/A</td><td>Multicast</td></tr>
+<tr><td>E</td><td>240-255</td><td>240.0.0.0 - 255.255.255.255</td><td>N/A</td><td>Reserved</td></tr>
+</table>
+
+<h4>Private IP Ranges (RFC 1918)</h4>
+<p>These addresses are not routable on the Internet and are used for internal networks:</p>
+<table>
+<tr><th>Class</th><th>Range</th><th>CIDR</th><th>Common Use</th></tr>
+<tr><td>A</td><td>10.0.0.0 - 10.255.255.255</td><td>10.0.0.0/8</td><td>Large enterprises</td></tr>
+<tr><td>B</td><td>172.16.0.0 - 172.31.255.255</td><td>172.16.0.0/12</td><td>Medium networks</td></tr>
+<tr><td>C</td><td>192.168.0.0 - 192.168.255.255</td><td>192.168.0.0/16</td><td>Home/small office</td></tr>
+</table>
+
+<h4>Special Addresses</h4>
+<table>
+<tr><th>Address</th><th>Purpose</th></tr>
+<tr><td>127.0.0.0/8</td><td>Loopback (localhost) - 127.0.0.1 most common</td></tr>
+<tr><td>0.0.0.0</td><td>Default route / "any" address</td></tr>
+<tr><td>255.255.255.255</td><td>Broadcast to all hosts on local network</td></tr>
+<tr><td>169.254.0.0/16</td><td>Link-local (APIPA) - auto-assigned when DHCP fails</td></tr>
+</table>
+
+<h3>2.2 Subnet Masks</h3>
+<p>A subnet mask determines which portion of an IP address identifies the network and which identifies the host. The mask uses consecutive 1s for the network portion.</p>
+
+<pre>IP Address:    192.168.1.100    = 11000000.10101000.00000001.01100100
+Subnet Mask:   255.255.255.0    = 11111111.11111111.11111111.00000000
+                                  |-------- Network --------| |-Host-|
+
+Network ID:    192.168.1.0      (IP AND Mask)
+Broadcast:     192.168.1.255    (all host bits = 1)
+Host Range:    192.168.1.1 - 192.168.1.254</pre>
+
+<h4>CIDR Notation</h4>
+<p>Classless Inter-Domain Routing uses a slash followed by the number of network bits:</p>
+<table>
+<tr><th>CIDR</th><th>Subnet Mask</th><th>Hosts</th><th>Binary</th></tr>
+<tr><td>/8</td><td>255.0.0.0</td><td>16,777,214</td><td>11111111.00000000.00000000.00000000</td></tr>
+<tr><td>/16</td><td>255.255.0.0</td><td>65,534</td><td>11111111.11111111.00000000.00000000</td></tr>
+<tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>11111111.11111111.11111111.00000000</td></tr>
+<tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>11111111.11111111.11111111.10000000</td></tr>
+<tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>11111111.11111111.11111111.11000000</td></tr>
+<tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>11111111.11111111.11111111.11100000</td></tr>
+<tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>11111111.11111111.11111111.11110000</td></tr>
+<tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>11111111.11111111.11111111.11111000</td></tr>
+<tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>11111111.11111111.11111111.11111100</td></tr>
+<tr><td>/32</td><td>255.255.255.255</td><td>1</td><td>11111111.11111111.11111111.11111111</td></tr>
+</table>
+
+<h3>2.3 Subnetting</h3>
+<p>Subnetting divides a network into smaller segments. This improves security, reduces broadcast traffic, and allows better IP management.</p>
+
+<h4>Subnetting Formulas</h4>
+<pre>Number of subnets     = 2^(borrowed bits)
+Number of hosts       = 2^(host bits) - 2
+Usable hosts          = Total hosts - 2 (network ID and broadcast)</pre>
+
+<h4>Subnetting Example</h4>
+<p>Given: 192.168.10.0/24, create 4 subnets</p>
+<pre>Need 4 subnets: 2^2 = 4, so borrow 2 bits
+New mask: /24 + 2 = /26 (255.255.255.192)
+Hosts per subnet: 2^6 - 2 = 62
+
+Subnet 0: 192.168.10.0/26
+  Network:   192.168.10.0
+  First:     192.168.10.1
+  Last:      192.168.10.62
+  Broadcast: 192.168.10.63
+
+Subnet 1: 192.168.10.64/26
+  Network:   192.168.10.64
+  First:     192.168.10.65
+  Last:      192.168.10.126
+  Broadcast: 192.168.10.127
+
+Subnet 2: 192.168.10.128/26
+  Network:   192.168.10.128
+  First:     192.168.10.129
+  Last:      192.168.10.190
+  Broadcast: 192.168.10.191
+
+Subnet 3: 192.168.10.192/26
+  Network:   192.168.10.192
+  First:     192.168.10.193
+  Last:      192.168.10.254
+  Broadcast: 192.168.10.255</pre>
+
+<h4>Quick Subnetting Method</h4>
+<pre>Block size = 256 - subnet mask octet value
+
+Example: /26 mask = 255.255.255.192
+Block size = 256 - 192 = 64
+Subnets start at: 0, 64, 128, 192</pre>
+
+<h3>2.4 IPv6 Addressing</h3>
+<p>IPv6 uses 128-bit addresses written as eight groups of four hexadecimal digits, separated by colons.</p>
+
+<pre>Full format:    2001:0db8:0000:0000:0000:0000:0000:0001
+Shortened:      2001:db8::1
+
+Rules for shortening:
+1. Remove leading zeros in each group: 0db8 → db8
+2. Replace consecutive all-zero groups with :: (once only)</pre>
+
+<h4>IPv6 Address Types</h4>
+<table>
+<tr><th>Type</th><th>Prefix</th><th>Description</th></tr>
+<tr><td>Global Unicast</td><td>2000::/3</td><td>Routable Internet addresses</td></tr>
+<tr><td>Link-Local</td><td>fe80::/10</td><td>Auto-configured, single link only</td></tr>
+<tr><td>Unique Local</td><td>fc00::/7</td><td>Private addresses (like RFC 1918)</td></tr>
+<tr><td>Multicast</td><td>ff00::/8</td><td>One-to-many communication</td></tr>
+<tr><td>Loopback</td><td>::1/128</td><td>Localhost</td></tr>
+<tr><td>Unspecified</td><td>::/128</td><td>Absence of address</td></tr>
+</table>
+
+<h4>IPv6 vs IPv4</h4>
+<table>
+<tr><th>Feature</th><th>IPv4</th><th>IPv6</th></tr>
+<tr><td>Address size</td><td>32 bits</td><td>128 bits</td></tr>
+<tr><td>Address count</td><td>~4.3 billion</td><td>~340 undecillion</td></tr>
+<tr><td>Header size</td><td>20-60 bytes</td><td>40 bytes (fixed)</td></tr>
+<tr><td>Broadcast</td><td>Yes</td><td>No (uses multicast)</td></tr>
+<tr><td>Auto-config</td><td>DHCP</td><td>SLAAC or DHCPv6</td></tr>
+<tr><td>IPsec</td><td>Optional</td><td>Built-in</td></tr>
+</table>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 2.1</div>
+<ol>
+<li>Convert 172.16.45.200 to binary</li>
+<li>What class is 150.100.50.25? Is it private or public?</li>
+<li>Given 10.0.0.0/8, subnet it to support 500 hosts per subnet</li>
+<li>Calculate network ID, broadcast, and host range for 192.168.50.73/27</li>
+<li>Shorten this IPv6: 2001:0db8:0000:0042:0000:0000:0000:8a2e</li>
+</ol>
+</div>
+
+<div class="part-header"><h2>PART 3: TRANSPORT LAYER - TCP & UDP</h2></div>
+
+<h3>3.1 TCP (Transmission Control Protocol)</h3>
+<p>TCP is a connection-oriented, reliable protocol. It guarantees delivery, maintains order, and handles congestion control. Used when data integrity is critical.</p>
+
+<h4>TCP Header (20-60 bytes)</h4>
+<pre>0                   1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Source Port          |       Destination Port        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        Sequence Number                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Acknowledgment Number                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Data |       |C|E|U|A|P|R|S|F|                               |
+| Offset| Rsrvd |W|C|R|C|S|S|Y|I|            Window             |
+|       |       |R|E|G|K|H|T|N|N|                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Checksum            |         Urgent Pointer        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Options (if any)                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</pre>
+
+<h4>TCP Flags</h4>
+<table>
+<tr><th>Flag</th><th>Name</th><th>Purpose</th></tr>
+<tr><td>SYN</td><td>Synchronize</td><td>Initiate connection, sync sequence numbers</td></tr>
+<tr><td>ACK</td><td>Acknowledgment</td><td>Confirms receipt of data</td></tr>
+<tr><td>FIN</td><td>Finish</td><td>Gracefully close connection</td></tr>
+<tr><td>RST</td><td>Reset</td><td>Abort connection immediately</td></tr>
+<tr><td>PSH</td><td>Push</td><td>Send data immediately, don't buffer</td></tr>
+<tr><td>URG</td><td>Urgent</td><td>Urgent data present</td></tr>
+</table>
+
+<h4>TCP Three-Way Handshake</h4>
+<p>TCP establishes connections using a three-step process:</p>
+<div class="diagram">
+Client                              Server
+   |                                   |
+   |  1. SYN (seq=100)                 |
+   |  ──────────────────────────────►  |
+   |                                   |
+   |  2. SYN-ACK (seq=300, ack=101)    |
+   |  ◄──────────────────────────────  |
+   |                                   |
+   |  3. ACK (seq=101, ack=301)        |
+   |  ──────────────────────────────►  |
+   |                                   |
+   |      Connection ESTABLISHED       |
+</div>
+
+<h4>TCP Connection Termination (Four-Way)</h4>
+<div class="diagram">
+Client                              Server
+   |                                   |
+   |  1. FIN                           |
+   |  ──────────────────────────────►  |
+   |                                   |
+   |  2. ACK                           |
+   |  ◄──────────────────────────────  |
+   |                                   |
+   |  3. FIN                           |
+   |  ◄──────────────────────────────  |
+   |                                   |
+   |  4. ACK                           |
+   |  ──────────────────────────────►  |
+   |                                   |
+   |      Connection CLOSED            |
+</div>
+
+<h4>TCP Features</h4>
+<p><strong>Reliability:</strong> Sequence numbers track data order. Acknowledgments confirm receipt. Retransmission handles lost packets.</p>
+<p><strong>Flow Control:</strong> Window size tells sender how much data receiver can buffer. Prevents overwhelming slow receivers.</p>
+<p><strong>Congestion Control:</strong> Algorithms (slow start, congestion avoidance) prevent network overload.</p>
+
+<h3>3.2 UDP (User Datagram Protocol)</h3>
+<p>UDP is a connectionless, unreliable protocol. No handshake, no acknowledgments, no ordering. Fast and lightweight—used when speed matters more than reliability.</p>
+
+<h4>UDP Header (8 bytes)</h4>
+<pre>0                   1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Source Port          |       Destination Port        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            Length             |           Checksum            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          Data ...                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</pre>
+
+<h4>TCP vs UDP Comparison</h4>
+<table>
+<tr><th>Feature</th><th>TCP</th><th>UDP</th></tr>
+<tr><td>Connection</td><td>Connection-oriented</td><td>Connectionless</td></tr>
+<tr><td>Reliability</td><td>Guaranteed delivery</td><td>Best effort</td></tr>
+<tr><td>Ordering</td><td>Maintains order</td><td>No ordering</td></tr>
+<tr><td>Speed</td><td>Slower (overhead)</td><td>Faster</td></tr>
+<tr><td>Header size</td><td>20-60 bytes</td><td>8 bytes</td></tr>
+<tr><td>Flow control</td><td>Yes</td><td>No</td></tr>
+<tr><td>Use cases</td><td>Web, email, file transfer</td><td>DNS, streaming, gaming, VoIP</td></tr>
+</table>
+
+<h3>3.3 Ports</h3>
+<p>Ports are 16-bit numbers (0-65535) that identify specific applications/services. Combined with an IP address, they form a socket (e.g., 192.168.1.1:80).</p>
+
+<h4>Port Ranges</h4>
+<table>
+<tr><th>Range</th><th>Name</th><th>Description</th></tr>
+<tr><td>0-1023</td><td>Well-Known</td><td>Reserved for common services (root required)</td></tr>
+<tr><td>1024-49151</td><td>Registered</td><td>Assigned by IANA for specific applications</td></tr>
+<tr><td>49152-65535</td><td>Dynamic/Private</td><td>Ephemeral ports for client connections</td></tr>
+</table>
+
+<h4>Common Ports (Must Know)</h4>
+<table>
+<tr><th>Port</th><th>Protocol</th><th>Service</th><th>Description</th></tr>
+<tr><td>20, 21</td><td>TCP</td><td>FTP</td><td>File Transfer (20=data, 21=control)</td></tr>
+<tr><td>22</td><td>TCP</td><td>SSH</td><td>Secure Shell</td></tr>
+<tr><td>23</td><td>TCP</td><td>Telnet</td><td>Unencrypted remote access</td></tr>
+<tr><td>25</td><td>TCP</td><td>
+
+# Read-only variables
+readonly PI=3.14159
+declare -r CONSTANT="unchangeable"</pre>
+
+<h4>Command Substitution</h4>
+<pre>current_date=$(date)
+file_count=$(ls | wc -l)
+user=$(whoami)
+
+# Older syntax (backticks) - avoid
+current_date=`date`</pre>
+
+<h4>Arithmetic Operations</h4>
+<pre>count=5
+((count++))               # Increment
+((count--))               # Decrement
+((count += 10))           # Add 10
+
+result=$((5 + 3))         # Addition
+result=$((10 - 4))        # Subtraction  
+result=$((3 * 4))         # Multiplication
+result=$((20 / 4))        # Division
+result=$((17 % 5))        # Modulo (remainder)
+result=$((2 ** 8))        # Exponentiation</pre>
+
+<h4>String Operations</h4>
+<pre>str="Hello World"
+echo ${#str}              # Length: 11
+echo ${str:0:5}           # Substring: Hello
+echo ${str:6}             # From position 6: World
+echo ${str/World/Bash}    # Replace: Hello Bash
+echo ${str//o/0}          # Replace all: Hell0 W0rld
+echo ${str,,}             # Lowercase: hello world
+echo ${str^^}             # Uppercase: HELLO WORLD
+echo ${str^}              # Capitalize first: Hello world</pre>
+
+<h4>Default Values</h4>
+<pre>${var:-default}           # Use default if var is unset
+${var:=default}           # Set and use default if var is unset
+${var:+alternate}         # Use alternate if var IS set
+${var:?error message}     # Exit with error if var is unset</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 3.2</div>
+<ol>
+<li>Create variables for your name, birth year, and city</li>
+<li>Calculate your age using arithmetic</li>
+<li>Create a sentence using all variables</li>
+<li>Store the number of files in <code>/etc</code> in a variable</li>
+<li>Extract the first 3 characters of your name using substring</li>
+</ol>
+</div>
+
+<h3>3.3 User Input</h3>
+<pre>read name                       # Basic input
+read -p "Enter name: " name     # With prompt
+read -sp "Password: " pass      # Silent (hidden) input
+read -t 5 -p "Quick! " answer   # 5-second timeout
+read -n 1 -p "Continue? " char  # Single character
+
+# Read into array
+read -a colors -p "Enter colors (space-separated): "
+echo "First: ${colors[0]}"
+
+# Default values
+read -p "Name [John]: " name
+name=${name:-John}</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 3.3</div>
+Create an interactive script that:
+<ol>
+<li>Asks for the user's name</li>
+<li>Asks for their age</li>
+<li>Asks for a password (hidden)</li>
+<li>Calculates birth year from age</li>
+<li>Displays a summary of entered information</li>
+</ol>
+</div>
+
+<h3>3.4 Conditionals</h3>
+
+<h4>Basic if-else Structure</h4>
+<pre>if [ condition ]; then
+    commands
+elif [ condition ]; then
+    commands
+else
+    commands
+fi</pre>
+
+<h4>Numeric Comparisons</h4>
+<pre>[ $a -eq $b ]    # Equal
+[ $a -ne $b ]    # Not equal
+[ $a -lt $b ]    # Less than
+[ $a -le $b ]    # Less than or equal
+[ $a -gt $b ]    # Greater than
+[ $a -ge $b ]    # Greater than or equal</pre>
+
+<h4>String Comparisons</h4>
+<pre>[ "$a" = "$b" ]    # Equal (single = in [ ])
+[ "$a" != "$b" ]   # Not equal
+[ -z "$a" ]        # String is empty
+[ -n "$a" ]        # String is not empty</pre>
+
+<h4>File Tests</h4>
+<pre>[ -e file ]    # File exists
+[ -f file ]    # Is a regular file
+[ -d file ]    # Is a directory
+[ -r file ]    # Is readable
+[ -w file ]    # Is writable
+[ -x file ]    # Is executable
+[ -s file ]    # File size > 0
+[ -L file ]    # Is a symbolic link
+[ f1 -nt f2 ]  # f1 is newer than f2
+[ f1 -ot f2 ]  # f1 is older than f2</pre>
+
+<h4>Logical Operators</h4>
+<pre>[ cond1 ] && [ cond2 ]    # AND
+[ cond1 ] || [ cond2 ]    # OR
+[ ! condition ]           # NOT
+
+# Inside [[ ]] (preferred)
+[[ cond1 && cond2 ]]
+[[ cond1 || cond2 ]]</pre>
+
+<h4>Modern [[ ]] Syntax (Recommended)</h4>
+<pre>[[ $a == $b ]]            # String comparison
+[[ $a == h* ]]            # Glob pattern matching
+[[ $a =~ ^[0-9]+$ ]]      # Regex matching
+[[ -f $file && -r $file ]] # Combined tests</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 3.4</div>
+Create a script that:
+<ol>
+<li>Asks for a filename</li>
+<li>Checks if it exists</li>
+<li>If it exists, reports whether it's a file or directory</li>
+<li>Reports its permissions (readable, writable, executable)</li>
+<li>If it doesn't exist, asks if user wants to create it as file or directory</li>
+</ol>
+</div>
+
+<h3>3.5 Loops</h3>
+
+<h4>For Loop</h4>
+<pre># List form
+for item in apple banana cherry; do
+    echo "$item"
+done
+
+# Range
+for i in {1..10}; do
+    echo "$i"
+done
+
+# Range with step
+for i in {0..20..5}; do    # 0, 5, 10, 15, 20
+    echo "$i"
+done
+
+# C-style
+for ((i=0; i<10; i++)); do
+    echo "$i"
+done
+
+# Over files
+for file in *.txt; do
+    echo "Processing $file"
+done
+
+# Over command output
+for user in $(cat /etc/passwd | cut -d: -f1); do
+    echo "$user"
+done</pre>
+
+<h4>While Loop</h4>
+<pre>count=0
+while [ $count -lt 5 ]; do
+    echo "$count"
+    ((count++))
+done
+
+# Infinite loop
+while true; do
+    echo "Press Ctrl+C to stop"
+    sleep 1
+done
+
+# Read file line by line
+while IFS= read -r line; do
+    echo "$line"
+done < filename</pre>
+
+<h4>Until Loop</h4>
+<pre>count=5
+until [ $count -eq 0 ]; do
+    echo "$count"
+    ((count--))
+done</pre>
+
+<h4>Loop Control</h4>
+<pre>break       # Exit the loop entirely
+continue    # Skip to next iteration
+break 2     # Break out of 2 nested loops</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 3.5</div>
+<ol>
+<li>Print numbers 1-20, skipping multiples of 3</li>
+<li>Create a countdown from 10 to 1, then print "Liftoff!"</li>
+<li>Loop through all <code>.sh</code> files and display their line counts</li>
+<li>Read a file line by line and number each line</li>
+<li>Create a multiplication table (1-10) using nested loops</li>
+</ol>
+</div>
+
+<h3>3.6 Case Statements</h3>
+<pre>case $variable in
+    pattern1)
+        commands
+        ;;
+    pattern2|pattern3)
+        commands
+        ;;
+    *)
+        default commands
+        ;;
+esac</pre>
+
+<h4>Example: Menu System</h4>
+<pre>#!/bin/bash
+echo "Select an option:"
+echo "1) Start"
+echo "2) Stop"  
+echo "3) Status"
+echo "q) Quit"
+
+read -p "Choice: " choice
+
+case $choice in
+    1|start|Start)
+        echo "Starting service..."
+        ;;
+    2|stop|Stop)
+        echo "Stopping service..."
+        ;;
+    3|status|Status)
+        echo "Checking status..."
+        ;;
+    q|Q|quit)
+        echo "Goodbye!"
+        exit 0
+        ;;
+    *)
+        echo "Invalid option: $choice"
+        exit 1
+        ;;
+esac</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 3.6</div>
+Create a calculator script that:
+<ol>
+<li>Asks for the first number</li>
+<li>Asks for an operation (+, -, *, /)</li>
+<li>Asks for the second number</li>
+<li>Uses case to perform the calculation</li>
+<li>Handles division by zero gracefully</li>
+</ol>
+</div>
+
+<div class="part-header"><h2>PART 4: FUNCTIONS & ADVANCED SCRIPTING</h2></div>
+
+<h3>4.1 Functions</h3>
+<p>Functions allow you to group commands into reusable blocks. They make scripts more organized, readable, and maintainable.</p>
+
+<h4>Defining Functions</h4>
+<pre># Style 1 (preferred)
+greet() {
+    echo "Hello, World!"
+}
+
+# Style 2
+function greet {
+    echo "Hello, World!"
+}
+
+# Call the function
+greet</pre>
+
+<h4>Parameters</h4>
+<pre>greet() {
+    echo "Hello, $1!"           # First argument
+    echo "You are $2 years old" # Second argument
+    echo "All args: $@"         # All arguments
+    echo "Number of args: $#"   # Argument count
+}
+
+greet "Alice" 30</pre>
+
+<h4>Return Values</h4>
+<pre># Return status (0-255)
+is_even() {
+    if (( $1 % 2 == 0 )); then
+        return 0    # Success/true
+    else
+        return 1    # Failure/false
+    fi
+}
+
+if is_even 4; then
+    echo "4 is even"
+fi
+
+# Return data via echo
+add() {
+    local result=$(( $1 + $2 ))
+    echo $result
+}
+
+sum=$(add 5 3)
+echo "Sum: $sum"</pre>
+
+<h4>Local Variables</h4>
+<pre>myfunc() {
+    local myvar="I'm local"    # Only exists in function
+    global_var="I'm global"    # Accessible everywhere
+    echo "$myvar"
+}
+
+myfunc
+echo "$global_var"    # Works
+echo "$myvar"         # Empty - local to function</pre>
+
+<h4>Practical Example</h4>
+<pre>#!/bin/bash
+
+log() {
+    local level=$1
+    local message=$2
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] [$level] $message"
+}
+
+die() {
+    log "ERROR" "$1"
+    exit ${2:-1}
+}
+
+check_file() {
+    local file=$1
+    [[ -f "$file" ]] || die "File not found: $file" 2
+    [[ -r "$file" ]] || die "File not readable: $file" 3
+    log "INFO" "File OK: $file"
+}
+
+# Usage
+log "INFO" "Script started"
+check_file "/etc/passwd"
+log "INFO" "Script completed"</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 4.1</div>
+Create a script with these functions:
+<ol>
+<li><code>is_number()</code> - returns 0 if argument is a valid number</li>
+<li><code>factorial()</code> - calculates factorial recursively</li>
+<li><code>to_upper()</code> - converts string to uppercase</li>
+<li><code>file_info()</code> - displays size, permissions, and modification date</li>
+<li>Test all functions with various inputs</li>
+</ol>
+</div>
+
+<h3>4.2 Arrays</h3>
+
+<h4>Indexed Arrays</h4>
+<pre># Declaration
+fruits=("apple" "banana" "cherry")
+numbers=(1 2 3 4 5)
+
+# Add elements
+fruits[3]="date"
+fruits+=("elderberry")
+
+# Access elements
+echo ${fruits[0]}         # First element: apple
+echo ${fruits[-1]}        # Last element: elderberry
+echo ${fruits[@]}         # All elements
+echo ${#fruits[@]}        # Array length
+echo ${!fruits[@]}        # All indices
+
+# Slicing
+echo ${fruits[@]:1:2}     # Elements 1-2: banana cherry
+
+# Looping
+for fruit in "${fruits[@]}"; do
+    echo "$fruit"
+done
+
+# With index
+for i in "${!fruits[@]}"; do
+    echo "$i: ${fruits[$i]}"
+done
+
+# Remove element
+unset fruits[1]</pre>
+
+<h4>Associative Arrays (Bash 4+)</h4>
+<pre># Must declare first
+declare -A user
+
+# Assign values
+user[name]="John"
+user[age]=30
+user[city]="NYC"
+
+# Or declare with values
+declare -A colors=(
+    [red]="#FF0000"
+    [green]="#00FF00"
+    [blue]="#0000FF"
+)
+
+# Access
+echo ${user[name]}
+echo ${!user[@]}          # All keys
+echo ${user[@]}           # All values
+
+# Loop
+for key in "${!user[@]}"; do
+    echo "$key: ${user[$key]}"
+done</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 4.2</div>
+<ol>
+<li>Create an array of 5 programming languages</li>
+<li>Print them numbered (1. Python, 2. Java, etc.)</li>
+<li>Add "Rust" to the end</li>
+<li>Remove the third language</li>
+<li>Create an associative array for a book (title, author, year, pages)</li>
+<li>Display the book information in a formatted way</li>
+</ol>
+</div>
+
+<h3>4.3 Command Line Arguments</h3>
+
+<h4>Positional Parameters</h4>
+<pre>#!/bin/bash
+echo "Script name: $0"
+echo "First arg: $1"
+echo "Second arg: $2"
+echo "All args (separate): $@"
+echo "All args (single string): $*"
+echo "Number of args: $#"
+
+# Shift arguments
+while [ $# -gt 0 ]; do
+    echo "Processing: $1"
+    shift                    # Remove first arg, shift others down
+done</pre>
+
+<h4>Using getopts (Short Options)</h4>
+<pre>#!/bin/bash
+
+usage() {
+    echo "Usage: $0 [-v] [-f file] [-o output]"
+    exit 1
+}
+
+verbose=false
+filename=""
+output=""
+
+while getopts "vf:o:h" opt; do
+    case $opt in
+        v) verbose=true ;;
+        f) filename="$OPTARG" ;;
+        o) output="$OPTARG" ;;
+        h) usage ;;
+        ?) usage ;;
+    esac
+done
+
+# Shift past processed options
+shift $((OPTIND - 1))
+
+# Remaining arguments
+echo "Remaining args: $@"
+echo "Verbose: $verbose"
+echo "Filename: $filename"</pre>
+
+<h4>Long Options Pattern</h4>
+<pre>#!/bin/bash
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -v|--verbose)
+            verbose=true
+            shift
+            ;;
+        -f|--file)
+            filename="$2"
+            shift 2
+            ;;
+        -o|--output)
+            output="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            ;;
+    esac
+done</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 4.3</div>
+Create a file processing script that accepts:
+<ol>
+<li><code>-i</code> or <code>--input</code> for input file (required)</li>
+<li><code>-o</code> or <code>--output</code> for output file (optional)</li>
+<li><code>-v</code> or <code>--verbose</code> for verbose mode</li>
+<li><code>-h</code> or <code>--help</code> for help message</li>
+<li>Validates that input file exists before processing</li>
+</ol>
+</div>
+
+<h3>4.4 Error Handling</h3>
+
+<h4>Exit Status</h4>
+<pre># Every command returns an exit status
+command
+echo $?              # 0 = success, non-zero = failure
+
+# Check status
+if command; then
+    echo "Success"
+else
+    echo "Failed"
+fi
+
+# Shorthand
+command && echo "Success" || echo "Failed"</pre>
+
+<h4>Strict Mode</h4>
+<pre>#!/bin/bash
+set -e              # Exit on any error
+set -u              # Error on undefined variables
+set -o pipefail     # Pipeline fails if any command fails
+
+# Combined (recommended for scripts)
+set -euo pipefail
+
+# Debug mode
+set -x              # Print each command before execution</pre>
+
+<h4>Trap for Cleanup</h4>
+<pre>#!/bin/bash
+set -euo pipefail
+
+# Cleanup function
+cleanup() {
+    echo "Cleaning up..."
+    rm -f "$tempfile"
+    # Any other cleanup
+}
+
+# Set trap
+trap cleanup EXIT        # Run on script exit
+trap cleanup ERR         # Run on error
+trap 'echo "Interrupted!"; exit 1' INT  # Ctrl+C
+
+# Create temp file
+tempfile=$(mktemp)
+echo "Working with $tempfile"
+
+# Script work here...
+sleep 10
+
+# Cleanup runs automatically on exit</pre>
+
+<h4>Error Function</h4>
+<pre>die() {
+    echo "ERROR: $1" >&2
+    exit "${2:-1}"
+}
+
+warn() {
+    echo "WARNING: $1" >&2
+}
+
+# Usage
+[[ -f "$file" ]] || die "File not found: $file" 2
+[[ -n "$name" ]] || die "Name is required"</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 4.4</div>
+Create a robust script that:
+<ol>
+<li>Uses strict mode (<code>set -euo pipefail</code>)</li>
+<li>Creates a temporary directory for work</li>
+<li>Uses trap to ensure cleanup on exit or error</li>
+<li>Has custom <code>die()</code> and <code>log()</code> functions</li>
+<li>Validates all inputs with helpful error messages</li>
+</ol>
+</div>
+
+<div class="part-header"><h2>PART 5: INPUT/OUTPUT AND PROCESSES</h2></div>
+
+<h3>5.1 Redirection</h3>
+
+<h4>Standard Streams</h4>
+<p>Every process has three standard streams: stdin (0), stdout (1), and stderr (2).</p>
+
+<h4>Output Redirection</h4>
+<pre>command > file          # Redirect stdout, overwrite
+command >> file         # Redirect stdout, append
+command 2> file         # Redirect stderr
+command 2>> file        # Redirect stderr, append
+command &> file         # Redirect both stdout and stderr
+command > file 2>&1     # Same as above (older syntax)
+command 2>&1 | less     # Pipe both to less</pre>
+
+<h4>Input Redirection</h4>
+<pre>command < file          # Read input from file
+
+# Here document
+cat << EOF
+Line 1
+Line 2
+Variable: $HOME
+EOF
+
+# Here document (no variable expansion)
+cat << 'EOF'
+Line 1
+$HOME stays literal
+EOF
+
+# Here string
+grep "pattern" <<< "search in this string"</pre>
+
+<h4>Discarding Output</h4>
+<pre>command > /dev/null           # Discard stdout
+command 2> /dev/null          # Discard stderr
+command &> /dev/null          # Discard both</pre>
+
+<h4>tee - Write to File and Screen</h4>
+<pre>command | tee file            # Write to file AND display
+command | tee -a file         # Append instead of overwrite
+command 2>&1 | tee log.txt    # Log everything</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 5.1</div>
+<ol>
+<li>Run <code>ls -la /etc</code> and save output to a file</li>
+<li>Run a command that fails and capture only the error message</li>
+<li>Create a script that logs stdout and stderr to separate files</li>
+<li>Use a here document to create a multi-line configuration file</li>
+<li>Use <code>tee</code> to display output while also saving it</li>
+</ol>
+</div>
+
+<h3>5.2 Pipes and Command Chaining</h3>
+
+<h4>Pipes</h4>
+<pre># Basic pipe
+command1 | command2 | command3
+
+# Examples
+ls -la | grep ".txt"
+cat file | sort | uniq -c | sort -rn | head -10
+ps aux | grep nginx | grep -v grep
+
+# PIPESTATUS array
+command1 | command2
+echo ${PIPESTATUS[0]}    # Exit status of command1
+echo ${PIPESTATUS[1]}    # Exit status of command2</pre>
+
+<h4>Command Chaining</h4>
+<pre>command1 ; command2      # Run both regardless
+command1 && command2     # Run command2 only if command1 succeeds
+command1 || command2     # Run command2 only if command1 fails
+
+# Practical examples
+mkdir dir && cd dir
+[ -f file ] || touch file
+make && make install || echo "Build failed"</pre>
+
+<h4>Process Substitution</h4>
+<pre># Compare two command outputs
+diff <(ls dir1) <(ls dir2)
+
+# Use command output as file input
+while read line; do
+    echo "$line"
+done < <(find . -name "*.txt")
+
+# Write to multiple commands
+echo "data" | tee >(command1) >(command2) > /dev/null</pre>
+
+<h4>xargs - Build Commands</h4>
+<pre>find . -name "*.txt" | xargs grep "pattern"
+find . -name "*.tmp" | xargs rm
+
+# With placeholder
+find . -name "*.txt" | xargs -I {} cp {} backup/
+
+# Parallel execution
+find . -name "*.jpg" | xargs -P 4 -I {} convert {} {}.png
+
+# Handle spaces in filenames
+find . -name "*.txt" -print0 | xargs -0 grep "pattern"</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 5.2</div>
+<ol>
+<li>Find all <code>.sh</code> files and count total lines across all</li>
+<li>Compare the sorted output of two different directories</li>
+<li>Use xargs to create backups of all <code>.conf</code> files</li>
+<li>Chain commands to: create dir, enter it, create file, display path</li>
+</ol>
+</div>
+
+<h3>5.3 Process Management</h3>
+
+<h4>Background Processes</h4>
+<pre>command &               # Run in background
+jobs                    # List background jobs
+fg %1                   # Bring job 1 to foreground
+bg %1                   # Resume job 1 in background
+Ctrl+Z                  # Suspend current process
+disown %1               # Remove job from shell's job table
+nohup command &         # Run immune to hangups</pre>
+
+<h4>Process Information</h4>
+<pre>ps                      # Your processes
+ps aux                  # All processes (BSD style)
+ps -ef                  # All processes (System V style)
+pgrep name              # Find PID by name
+pidof name              # Find PID (exact match)
+top                     # Interactive process viewer
+htop                    # Better interactive viewer (if installed)</pre>
+
+<h4>Killing Processes</h4>
+<pre>kill PID                # Send SIGTERM (graceful)
+kill -9 PID             # Send SIGKILL (force)
+kill -15 PID            # Send SIGTERM explicitly
+killall name            # Kill by name
+pkill pattern           # Kill by pattern
+pkill -u username       # Kill all user's processes</pre>
+
+<h4>Process Priority</h4>
+<pre>nice -n 10 command      # Run with lower priority
+renice 10 -p PID        # Change running process priority
+# Nice values: -20 (highest) to 19 (lowest)</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 5.3</div>
+<ol>
+<li>Start <code>sleep 300</code> in background</li>
+<li>List your background jobs</li>
+<li>Bring it to foreground, then suspend it (Ctrl+Z)</li>
+<li>Resume it in background</li>
+<li>Find its PID and kill it</li>
+<li>Use <code>ps</code> to verify it's gone</li>
+</ol>
+</div>
+
+<h3>5.4 Signals</h3>
+
+<h4>Common Signals</h4>
+<table>
+<tr><th>Signal</th><th>Number</th><th>Description</th></tr>
+<tr><td>SIGHUP</td><td>1</td><td>Hangup (terminal closed)</td></tr>
+<tr><td>SIGINT</td><td>2</td><td>Interrupt (Ctrl+C)</td></tr>
+<tr><td>SIGQUIT</td><td>3</td><td>Quit (Ctrl+\)</td></tr>
+<tr><td>SIGKILL</td><td>9</td><td>Kill (cannot be caught)</td></tr>
+<tr><td>SIGTERM</td><td>15</td><td>Terminate (default kill)</td></tr>
+<tr><td>SIGSTOP</td><td>19</td><td>Stop (cannot be caught)</td></tr>
+<tr><td>SIGCONT</td><td>18</td><td>Continue stopped process</td></tr>
+</table>
+
+<h4>Trap Signals</h4>
+<pre>#!/bin/bash
+
+# Trap Ctrl+C
+trap 'echo "Caught SIGINT"; exit 1' INT
+
+# Trap multiple signals
+trap 'cleanup' EXIT ERR INT TERM
+
+# Ignore signal
+trap '' INT              # Cannot be interrupted
+
+# Reset to default
+trap - INT
+
+# Practical example
+#!/bin/bash
+cleanup() {
+    echo "Cleaning up..."
+    rm -rf "$WORK_DIR"
+}
+
+trap cleanup EXIT
+
+WORK_DIR=$(mktemp -d)
+echo "Working in $WORK_DIR"
+# Work happens here...
+sleep 30</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 5.4</div>
+Create a script that:
+<ol>
+<li>Traps Ctrl+C and asks "Are you sure? (y/n)"</li>
+<li>Creates a temp file on startup</li>
+<li>Ensures temp file is deleted on any exit</li>
+<li>Displays a custom message for SIGTERM</li>
+<li>Runs a loop that can be gracefully interrupted</li>
+</ol>
+</div>
+
+<div class="part-header"><h2>PART 6: ADVANCED TOPICS</h2></div>
+
+<h3>6.1 Regular Expressions</h3>
+
+<h4>Basic Regex Patterns</h4>
+<pre>.         Any single character
+^         Start of line
+$         End of line
+*         Zero or more of previous
+\+        One or more of previous (escape in basic regex)
+\?        Zero or one of previous
+[abc]     Character class: a, b, or c
+[^abc]    Negated class: not a, b, or c
+[a-z]     Range: lowercase letters
+[0-9]     Range: digits</pre>
+
+<h4>Extended Regex (grep -E, egrep)</h4>
+<pre>+         One or more (no escape needed)
+?         Zero or one (no escape needed)
+{n}       Exactly n occurrences
+{n,}      n or more occurrences
+{n,m}     Between n and m occurrences
+(ab)+     Group: one or more "ab"
+a|b       Alternation: a or b
+\b        Word boundary</pre>
+
+<h4>Grep Examples</h4>
+<pre>grep "^Error" logfile           # Lines starting with "Error"
+grep "\.txt$" filelist          # Lines ending with ".txt"
+grep -E "[0-9]{3}-[0-9]{4}" file  # Phone pattern: 123-4567
+grep -E "cat|dog" file          # "cat" or "dog"
+grep -E "^[A-Z].*\.$" file      # Capital letter...period</pre>
+
+<h4>Bash Regex Matching</h4>
+<pre>string="hello123"
+
+# Basic matching
+if [[ "$string" =~ ^[a-z]+[0-9]+$ ]]; then
+    echo "Match!"
+fi
+
+# Capture groups
+if [[ "$string" =~ ^([a-z]+)([0-9]+)$ ]]; then
+    echo "Letters: ${BASH_REMATCH[1]}"   # hello
+    echo "Numbers: ${BASH_REMATCH[2]}"   # 123
+fi
+
+# Validate email (simple)
+email="user@example.com"
+if [[ "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$ ]]; then
+    echo "Valid email"
+fi</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 6.1</div>
+<ol>
+<li>Find all lines containing valid email addresses in a file</li>
+<li>Extract IP addresses from a log file</li>
+<li>Validate phone numbers in format: (123) 456-7890</li>
+<li>Find lines starting with capital letter, ending with period</li>
+<li>Create a function that validates a date (YYYY-MM-DD)</li>
+</ol>
+</div>
+
+<h3>6.2 Debugging Scripts</h3>
+
+<h4>Debug Options</h4>
+<pre>bash -x script.sh       # Print commands as executed
+bash -v script.sh       # Print lines as read
+bash -n script.sh       # Check syntax without running
+
+# Inside script
+set -x                  # Enable debug mode
+set +x                  # Disable debug mode
+
+# Debug specific section
+set -x
+problematic_code_here
+set +x</pre>
+
+<h4>Debug Trap</h4>
+<pre>trap 'echo "DEBUG: $BASH_COMMAND"' DEBUG
+
+# Or more detailed
+trap 'echo "Line $LINENO: $BASH_COMMAND"' DEBUG</pre>
+
+<h4>Debugging Tips</h4>
+<pre># Print variable values
+echo "DEBUG: var=$var" >&2
+
+# Use PS4 for better trace output
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+set -x
+
+# Conditional debugging
+DEBUG=${DEBUG:-false}
+debug() {
+    $DEBUG && echo "DEBUG: $*" >&2
+}
+debug "Current value: $var"</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 6.2</div>
+<ol>
+<li>Take a broken script and use <code>-x</code> to find the bug</li>
+<li>Add a <code>debug()</code> function that can be toggled with a variable</li>
+<li>Use <code>PS4</code> to show line numbers in debug output</li>
+<li>Create a script that validates its own syntax before running</li>
+</ol>
+</div>
+
+<h3>6.3 Best Practices</h3>
+
+<h4>Script Template</h4>
+<pre>#!/bin/bash
+#
+# Script: name.sh
+# Description: What this script does
+# Author: Your Name
+# Date: 2024-01-01
+#
+
+set -euo pipefail
+
+# Constants
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_NAME="$(basename "$0")"
+
+# Default values
+VERBOSE=false
+DRY_RUN=false
+
+# Functions
+log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
+error() { echo "[ERROR] $*" >&2; }
+die() { error "$1"; exit "${2:-1}"; }
+
+usage() {
+    cat << EOF
+Usage: $SCRIPT_NAME [OPTIONS]
+
+Description of what this script does.
+
+OPTIONS:
+    -v, --verbose    Enable verbose output
+    -n, --dry-run    Show what would be done
+    -h, --help       Show this help message
+
+EXAMPLES:
+    $SCRIPT_NAME -v
+    $SCRIPT_NAME --dry-run
+
+EOF
+}
+
+cleanup() {
+    # Cleanup code here
+    :
+}
+trap cleanup EXIT
+
+main() {
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -v|--verbose) VERBOSE=true; shift ;;
+            -n|--dry-run) DRY_RUN=true; shift ;;
+            -h|--help) usage; exit 0 ;;
+            *) die "Unknown option: $1" ;;
+        esac
+    done
+    
+    # Main logic here
+    log "Script started"
+    
+    log "Script completed"
+}
+
+main "$@"</pre>
+
+<h4>Key Best Practices</h4>
+<p><strong>1. Always quote variables:</strong> Use <code>"$var"</code> not <code>$var</code></p>
+<p><strong>2. Use <code>[[ ]]</code> over <code>[ ]</code>:</strong> More features, fewer gotchas</p>
+<p><strong>3. Use <code>$(...)</code> over backticks:</strong> Nestable, more readable</p>
+<p><strong>4. Check command success:</strong> Use <code>set -e</code> or explicit checks</p>
+<p><strong>5. Use functions:</strong> Organize code into reusable units</p>
+<p><strong>6. Comment your code:</strong> Explain why, not just what</p>
+<p><strong>7. Use meaningful names:</strong> <code>user_count</code> not <code>uc</code></p>
+<p><strong>8. Handle errors gracefully:</strong> Provide helpful error messages</p>
+
+<h3>6.4 Useful Patterns</h3>
+
+<h4>Check if Running as Root</h4>
+<pre>if [[ $EUID -ne 0 ]]; then
+    die "This script must be run as root"
+fi</pre>
+
+<h4>Check Dependencies</h4>
+<pre>check_deps() {
+    local deps=("curl" "jq" "git")
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            die "Required command not found: $dep"
+        fi
+    done
+}
+check_deps</pre>
+
+<h4>Confirm Before Action</h4>
+<pre>confirm() {
+    read -p "$1 (y/n) " -n 1 -r
+    echo
+    [[ $REPLY =~ ^[Yy]$ ]]
+}
+
+if confirm "Delete all files?"; then
+    rm -rf *
+fi</pre>
+
+<h4>Progress Indicator</h4>
+<pre>spinner() {
+    local pid=$1
+    local spin='-\|/'
+    local i=0
+    while kill -0 $pid 2>/dev/null; do
+        i=$(( (i+1) % 4 ))
+        printf "\r${spin:$i:1}"
+        sleep .1
+    done
+    printf "\r"
+}
+
+long_command &
+spinner $!</pre>
+
+<h4>Retry Logic</h4>
+<pre>retry() {
+    local max_attempts=$1
+    local delay=$2
+    shift 2
+    local attempt=1
+    
+    until "$@"; do
+        if (( attempt >= max_attempts )); then
+            echo "Failed after $attempt attempts"
+            return 1
+        fi
+        echo "Attempt $attempt failed, retrying in ${delay}s..."
+        sleep "$delay"
+        ((attempt++))
+    done
+}
+
+retry 3 5 curl -f https://example.com</pre>
+
+<div class="exercise">
+<div class="exercise-title">Exercise 6.3 - Final Project</div>
+Create a comprehensive backup script that:
+<ol>
+<li>Uses the script template with proper structure</li>
+<li>Accepts source and destination via command-line options</li>
+<li>Validates that source exists and destination is writable</li>
+<li>Creates timestamped backup archives</li>
+<li>Supports verbose and dry-run modes</li>
+<li>Logs operations to a file</li>
+<li>Keeps only the last N backups (configurable)</li>
+<li>Sends email notification on completion (optional)</li>
+<li>Includes comprehensive error handling</li>
+<li>Has a help message with examples</li>
+</ol>
+</div>
+
+<hr style="margin: 50px 0;">
+
+<h2>Quick Reference Card</h2>
+
+<h4>Essential Commands</h4>
+<pre>cd, ls, pwd, mkdir, rm, cp, mv, touch, cat, less, head, tail
+grep, sed, awk, sort, uniq, wc, cut, tr, find, xargs</pre>
+
+<h4>Script Essentials</h4>
+<pre>#!/bin/bash
+set -euo pipefail
+$1, $2, $@, $#, $?, $
+[[ condition ]]
+for/while/until loops
+function_name() { commands; }</pre>
+
+<h4>Useful Shortcuts</h4>
+<pre>Ctrl+C    Interrupt
+Ctrl+Z    Suspend
+Ctrl+D    EOF/Exit
+Ctrl+L    Clear screen
+Ctrl+R    Search history
+Ctrl+A    Start of line
+Ctrl+E    End of line
+!!        Repeat last command
+!$        Last argument</pre>
+
+<hr>
+
+<p style="text-align: center; color: #666; margin-top: 40px;">
+<em>End of Bash Guide — Happy Scripting!</em>
+</p>
+
+</body>
+</html>
